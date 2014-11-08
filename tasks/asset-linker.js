@@ -22,8 +22,7 @@ var _AssetLinker = module.exports = function _AssetLinker(grunt){
 			root: '',
 			relative: false,
 			verifyExists: true, // Checks if files are present on the filesystem before injecting them
-			allowURL: true, // Allows Urls to be passed in
-			tag: undefined, // A tag to assign distribution Id's to.
+			host: undefined, // Allows Urls to be passed in
 			attr: 'src', // The attribute in said tag which links to the distribution
 			injector: function(path, id){ // This function gets called with a path and an id to inject in it
 				
