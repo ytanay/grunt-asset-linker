@@ -2,6 +2,9 @@
 
 > Automatically inject tags of any kind into your markup, and tag distributions while you're at it.
 
+## HOLD UP!
+This README is somewhat out of date. If in doubt, inspect the code.
+
 ## Getting Started
 This plugin requires Grunt `~0.4.x`
 
