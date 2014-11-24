@@ -38,7 +38,7 @@ module.exports = function(grunt) {
           root: 'test/'
         },
         files: {
-          'test/fixtures/injector.test.html': 'httpgoogle'
+          'test/fixtures/injector.test.html': 'safta.js'
         }
       },
       tagger_test: {

@@ -1,6 +1,6 @@
 {
   "name": "grunt-asset-linker",
-  "description": "Runs through your markup and automatically links in your assets (scripts/styles/images)",
+  "description": "Traverses through your markup and automatically links in your assets (scripts/styles/images)",
   "version": "0.0.1",
   "homepage": "https://github.com/ytanay/grunt-asset-linker",
   "contributors": [

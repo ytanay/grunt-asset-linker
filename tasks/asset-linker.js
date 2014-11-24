@@ -10,6 +10,7 @@
 'use strict';
 
 var util = require('util');
+var _path = require('path');
 
 var _AssetLinker = module.exports = function _AssetLinker(grunt){
 
@@ -22,32 +23,8 @@ var _AssetLinker = module.exports = function _AssetLinker(grunt){
 			root: '',
 			relative: false,
 			verifyExists: true, // Checks if files are present on the filesystem before injecting them
-			host: undefined, // Allows Urls to be passed in
-			attr: 'src', // The attribute in said tag which links to the distribution
-			injector: function(path, id){ // This function gets called with a path and an id to inject in it
-				
-				if(!path){ // Just in case
-					return '';
-				}
-
-				var parts = path.split('.'),
-					current = parts[parts.length - 2];
-
-				// Do we already have a id for this link?
-				if(parts.length > 2 && current.length === id.length && /[0-9a-f]+/i.test(current)){ //Naively assume that id are hex based. Why not?
-					parts[parts.length - 2] = id; // Replace the old id with the new one
-					return parts.join('.');
-				}
-
-				if(parts.length < 2){ // If this path does not have an extension or is empty, we'll leave it as it is
-					return path;
-			}
-
-				// Otherwise, we have a fresh link. Time to inject a tag in it!
-				var ext = parts.pop();
-				return parts.join('.') + '.' + id + '.' + ext; 
-
-			}
+			url: undefined, // Allows Urls to be passed in
+			attr: 'src' // The attribute in said tag which links to the distribution
 		});
 
 		if(options.tag){
@@ -67,10 +44,6 @@ var _AssetLinker = module.exports = function _AssetLinker(grunt){
 		this.files.forEach(function(group){
 
 			var tags = group.src.filter(function(path){ // This filters the links we are trying to inject
-					grunt.log.warn('cecking ' +  path)
-					if(/^https?:\/\//.test(path)){ // If we are dealing with a valid url 
-						return options.allowURL; // And we allow urls, go ahead, otherwise, skip it
-					}
 
 					if(grunt.file.exists(path)){ // We are dealing with a file or an invalid url, which is it?
 						return true;
@@ -80,8 +53,8 @@ var _AssetLinker = module.exports = function _AssetLinker(grunt){
 					return !options.verifyExists; // If this isn't a valid file/URL, we'll return based on us needing to check if the path is valid.
 				}).map(function(path){ // This builds the tags around them
 
-					if(/^https?:\/\//.test(path)){ // A bit redundant, I admit, but simpler than wrapping everything in objects.
-						return util.format(options.template, path);
+					if(options.url){ // A bit redundant, I admit, but simpler than wrapping everything in objects.
+						return util.format(options.template, options.url + '/' + _path.basename(path));
 					}
 
 					path = path.replace(options.root, ''); // Strip out the root path
@@ -90,7 +63,7 @@ var _AssetLinker = module.exports = function _AssetLinker(grunt){
 						path = path.replace(/^\//,'');
 					}
 
-					// For sanity's sake, we'll strip out line breaks to get a clean tag. We'll calculate the actualidentation in a bit.
+					// For sanity's sake, we'll strip out line breaks to get a clean tag. We'll calculate the actual identation in a bit.
 					return util.format(options.template, path).replace(/(\r|\n)/g, ''); 
 				});
 
